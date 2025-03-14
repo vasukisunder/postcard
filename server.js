@@ -543,6 +543,10 @@ function formatWithLineBreaks(text) {
     .join('\n\n');
 }
 
+app.get('/', (req, res) => {
+  res.status(200).send('API Server is running');
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

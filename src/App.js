@@ -9,7 +9,7 @@ function App() {
   const captureNewSnapshot = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/capture-snapshot');
+      const response = await fetch('/server.js/api/capture-snapshot');
       const newSnapshot = await response.json();
       setCurrentSnapshot(newSnapshot);
     } catch (error) {
