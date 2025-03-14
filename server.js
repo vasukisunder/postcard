@@ -23,6 +23,10 @@ app.get('/api/capture-snapshot', async (req, res) => {
   }
 });
 
+app.get('/api/test', (req, res) => {
+  res.json({ message: 'API is working' });
+});
+
 // Helper function to get a random item from an array
 const getRandomItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
