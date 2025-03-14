@@ -3,6 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const axios = require('axios');
 require('dotenv').config();
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 12345;
@@ -10,7 +11,7 @@ const PORT = process.env.PORT || 12345;
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // API Routes
 app.get('/api/capture-snapshot', async (req, res) => {
@@ -545,6 +546,10 @@ function formatWithLineBreaks(text) {
 
 app.get('/', (req, res) => {
   res.status(200).send('API Server is running');
+});
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.listen(PORT, () => {
