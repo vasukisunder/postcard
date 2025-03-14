@@ -545,7 +545,7 @@ function formatWithLineBreaks(text) {
 }
 
 app.get('/', (req, res) => {
-  res.status(200).send('API Server is running');
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.get('*', (req, res) => {
