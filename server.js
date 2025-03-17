@@ -111,19 +111,19 @@ async function fetchWeatherData() {
 
 // Fetch latest news headline using RapidAPI
 async function fetchNewsHeadline() {
-  // List of country codes to get more global coverage
+  // Pick one random country
   const countries = ['US', 'GB', 'CA', 'AU', 'IN', 'JP', 'FR', 'DE', 'BR', 'ZA'];
-  
-  // Randomly select a country
   const country = getRandomItem(countries);
+  
+  console.log('Fetching news for country:', country); // Log for debugging
   
   const options = {
     method: 'GET',
     url: 'https://real-time-news-data.p.rapidapi.com/top-headlines',
     params: {
-      country: country,  // Randomly selected country
-      lang: 'en',        // Keeping English for readability
-      limit: '5'         // Get 5 articles to choose from
+      country: country,
+      lang: 'en',
+      limit: '5'
     },
     headers: {
       'x-rapidapi-key': process.env.RAPIDAPI_KEY,
@@ -139,10 +139,8 @@ async function fetchNewsHeadline() {
     };
   }
   
-  // Get a random article from the results for more variety
   const article = getRandomItem(data.data);
   
-  // Add the country to the text for context
   return {
     text: `Breaking news from ${getCountryName(country)}: "${article.title}" - ${article.source_name}`,
     image: article.photo_url,

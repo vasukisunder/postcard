@@ -21,19 +21,10 @@ body {
 
 /* Clean, minimal homepage */
 .homepage {
-  text-align: left;
-  margin-bottom: 60px;
-}
-
-.homepage h1 {
-  font-size: 24px;
-  font-weight: 400;
-  margin-bottom: 8px;
-}
-
-.homepage p {
-  font-size: 14px;
-  color: #666;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
 
 .capture-button {

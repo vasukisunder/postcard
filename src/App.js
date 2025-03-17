@@ -26,8 +26,6 @@ function App() {
     <div className="app-container">
       {!currentSnapshot ? (
         <div className="homepage">
-          <h1>World Snapshot</h1>
-          <p>A moment in time, captured from across the globe</p>
           <button 
             className="capture-button"
             onClick={captureNewSnapshot} 
