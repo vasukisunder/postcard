@@ -9,7 +9,7 @@ function App() {
   const captureNewSnapshot = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/server.js/api/capture-snapshot');
+      const response = await fetch('/api/capture-snapshot');
       const newSnapshot = await response.json();
       setCurrentSnapshot(newSnapshot);
     } catch (error) {
@@ -17,40 +17,41 @@ function App() {
     }
     setLoading(false);
   };
-  
-  const closeSnapshot = () => {
+
+  const goHome = () => {
     setCurrentSnapshot(null);
   };
   
   return (
     <div className="app-container">
       {!currentSnapshot ? (
-        // Homepage view
         <div className="homepage">
           <h1>World Snapshot</h1>
-          <p>Capture a moment in time from around the world</p>
+          <p>A moment in time, captured from across the globe</p>
           <button 
             className="capture-button"
             onClick={captureNewSnapshot} 
             disabled={loading}
           >
-            {loading ? 'Generating Receipt...' : 'Print World Receipt'}
+            {loading ? 'Capturing...' : 'Capture Moment'}
           </button>
         </div>
       ) : (
-        // Snapshot view
         <div className="snapshot-view">
           <Snapshot data={currentSnapshot} />
           <div className="snapshot-actions">
-            <button className="close-button" onClick={closeSnapshot}>
-              Return Home
+            <button 
+              className="home-button"
+              onClick={goHome}
+            >
+              Back Home
             </button>
             <button 
               className="capture-button"
               onClick={captureNewSnapshot} 
               disabled={loading}
             >
-              {loading ? 'Generating...' : 'Take New Snapshot'}
+              {loading ? 'Capturing...' : 'New Capture'}
             </button>
           </div>
         </div>

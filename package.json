@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "dev": "react-scripts start",
     "start": "node server.js",
-    "server": "nodemon server.js",
-    "client": "webpack serve --mode development --open",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "build": "webpack --mode production"
+    "server": "node server.js",
+    "build": "react-scripts build && cp -r build/* public/",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "keywords": [],
   "author": "",
@@ -32,9 +33,23 @@
     "css-loader": "^7.1.2",
     "html-webpack-plugin": "^5.6.3",
     "nodemon": "^3.1.9",
+    "react-scripts": "^5.0.1",
     "style-loader": "^4.0.0",
     "webpack": "^5.98.0",
     "webpack-cli": "^6.0.1",
     "webpack-dev-server": "^5.2.0"
+  },
+  "proxy": "http://localhost:3001",
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

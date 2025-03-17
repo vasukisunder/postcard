@@ -6,7 +6,7 @@ require('dotenv').config();
 const path = require('path');
 
 const app = express();
-const PORT = process.env.PORT || 12345;
+const PORT = process.env.PORT || 3001;
 
 // Middleware
 app.use(cors());
@@ -174,51 +174,41 @@ function getCountryName(code) {
   return countries[code] || code;
 }
 
-// Fetch space imagery from NASA EPIC API (enhanced images)
-async function fetchSpaceImagery() {
-  // NASA EPIC API for Earth imagery - using enhanced instead of natural
-  const url = `https://epic.gsfc.nasa.gov/api/enhanced?api_key=${process.env.NASA_API_KEY}`;
+// Rename the function to something more appropriate
+async function fetchRandomImage() {
+  const url = `https://api.unsplash.com/photos/random?query=landscape&orientation=landscape`;
   
-  const data = await fetchWithErrorHandling(url);
+  const options = {
+    headers: {
+      'Authorization': `Client-ID ${process.env.UNSPLASH_ACCESS_KEY}`
+    }
+  };
   
-  if (!data || data.length === 0) {
-    // Fallback to NASA Astronomy Picture of the Day
-    const apodUrl = `https://api.nasa.gov/planetary/apod?api_key=${process.env.NASA_API_KEY}`;
-    const apodData = await fetchWithErrorHandling(apodUrl);
+  try {
+    const data = await fetchWithErrorHandling(url, options);
     
-    if (!apodData) {
+    if (!data) {
       return { 
-        text: "No Earth imagery available right now."
+        text: "",  // Remove any text here
+        image: 'https://via.placeholder.com/800x600?text=Image+Unavailable'
       };
     }
     
     return {
-      text: `NASA's image of the day: "${apodData.title}"`,
-      image: apodData.url,
+      text: "",  // Remove any text here
+      image: data.urls.regular,
       raw: {
-        title: apodData.title,
-        explanation: apodData.explanation.substring(0, 100) + '...'
+        photographer: data.user.name,
+        location: data.location?.name || 'Unknown location',
       }
     };
+  } catch (error) {
+    console.error('Error fetching Unsplash image:', error);
+    return {
+      text: "",  // Remove any text here
+      image: 'https://via.placeholder.com/800x600?text=Image+Unavailable'
+    };
   }
-  
-  // Get the most recent image
-  const latestImage = data[0];
-  const date = latestImage.date.split(' ')[0].replace(/-/g, '/');
-  
-  // The enhanced image URL format is slightly different from natural
-  const imageUrl = `https://epic.gsfc.nasa.gov/archive/enhanced/${date}/png/${latestImage.image}.png`;
-  
-  return {
-    text: `This is how Earth looks from space right now (enhanced view).`,
-    image: imageUrl,
-    raw: {
-      date: latestImage.date,
-      coordinates: latestImage.centroid_coordinates ? 
-        `${latestImage.centroid_coordinates.lat.toFixed(2)}°, ${latestImage.centroid_coordinates.lon.toFixed(2)}°` : 
-        'Deep Space'
-    }
-  };
 }
 
 // Fetch latest earthquake data
@@ -477,7 +467,7 @@ async function captureWorldSnapshot() {
   const [
     weather, 
     news, 
-    space, 
+    image,  // renamed from space
     earthquake, 
     finance, 
     wikipedia,
@@ -485,7 +475,7 @@ async function captureWorldSnapshot() {
   ] = await Promise.all([
     fetchWeatherData(),
     fetchNewsHeadline(),
-    fetchSpaceImagery(),
+    fetchRandomImage(),  // updated function name
     fetchEarthquakeData(),
     fetchFinancialData(),
     fetchWikipediaActivity(),
@@ -498,34 +488,33 @@ async function captureWorldSnapshot() {
   // Create the receipt text with extra line spacing
   const receiptLines = [
     `It is ${localTime}.`,
-    `This is what the Earth looks like right now.`,
-    ``,
+    ``,  // Remove any image text reference
     weather.text,
     ``,
     news.text,
     ``,
     wikipedia.text,
     ``,
-    formattedMoonText,
+    moonPhase.text,
     ``,
     earthquake.text,
     ``,
     finance.text,
     ``,
     `Captured at ${new Date().toLocaleString()}`,
-    `End of Earth snapshot`
+    `End of snapshot`
   ];
   
   return {
     id: Date.now(),
     timestamp,
     localTime,
-    earthImage: space.image,
+    earthImage: image.image,
     receiptText: receiptLines.join('\n'),
     dataPoints: {
       weather,
       news,
-      space,
+      image,
       earthquake,
       finance,
       wikipedia,
