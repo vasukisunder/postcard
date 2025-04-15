@@ -26,13 +26,17 @@ function App() {
     <div className="app-container">
       {!currentSnapshot ? (
         <div className="homepage">
-          <button 
-            className="capture-button"
-            onClick={captureNewSnapshot} 
-            disabled={loading}
-          >
-            {loading ? 'Capturing...' : 'Capture Moment'}
-          </button>
+          <div className="horizontal-line"></div>
+          <div className="content-area">
+            <button 
+              className="capture-button"
+              onClick={captureNewSnapshot} 
+              disabled={loading}
+            >
+              {loading ? 'Capturing...' : 'Capture Moment'}
+            </button>
+            <div className="tagline">Instant snapshots of our world</div>
+          </div>
         </div>
       ) : (
         <div className="snapshot-view">
